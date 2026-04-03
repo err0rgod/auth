@@ -16,6 +16,13 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Create a strong password" required>
         </div>
+        <div class="password_requirements">
+            <p id="length">Password must be at least 8 characters long</p>
+            <p id="uppercase">Password must contain at least one uppercase letter</p>
+            <p id="lowercase">Password must contain at least one lowercase letter</p>
+            <p id="number">Password must contain at least one number</p>
+            <p id="special">Password must contain at least one special character</p>
+        </div>
         
         <button type="submit" class="btn">Sign Up</button>
     </form>
@@ -25,4 +32,42 @@
             Already have an account? <a href="{{ url_for('login.login') }}">Log in</a>
         </p>
     </div>
+
+<script>
+    const password = document.getElementById('password');
+    const submitBtn = document.querySelector('.btn'); // Get your Sign Up button
+    const requirements = {
+        length: document.getElementById('length'),
+        uppercase: document.getElementById('uppercase'),
+        lowercase: document.getElementById('lowercase'),
+        number: document.getElementById('number'),
+        special: document.getElementById('special')
+    }
+
+    password.addEventListener('input', () => {
+        const value = password.value;
+        
+        // 1. Toggle both valid and invalid classes
+        const isLengthValid = value.length >= 8;
+        const isUpperValid = /[A-Z]/.test(value);
+        const isLowerValid = /[a-z]/.test(value);
+        const isNumberValid = /\d/.test(value);
+        const isSpecialValid = /[^A-Za-z0-9]/.test(value);
+
+        updateRequirement(requirements.length, isLengthValid);
+        updateRequirement(requirements.uppercase, isUpperValid);
+        updateRequirement(requirements.lowercase, isLowerValid);
+        updateRequirement(requirements.number, isNumberValid);
+        updateRequirement(requirements.special, isSpecialValid);
+
+        // 2. Disable button if any requirement is false
+        submitBtn.disabled = !(isLengthValid && isUpperValid && isLowerValid && isNumberValid && isSpecialValid);
+    });
+
+    function updateRequirement(el, isValid) {
+        el.classList.toggle('valid', isValid);
+        el.classList.toggle('invalid', !isValid);
+    }
+
+</script>
 {% endblock %}

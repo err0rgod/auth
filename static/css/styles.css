@@ -84,6 +84,26 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
+.password_requirements {
+    margin-top: 1rem;
+}
+
+.password_requirements p {
+    margin: 0.25rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.password_requirements p.valid {
+    color: #4ade80;
+}
+
+.valid{
+    color: #4caf50;
+}
+.invalid{
+    color: #f44336;
+}
 .btn {
     width: 100%;
     padding: 0.75rem;
