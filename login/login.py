@@ -12,42 +12,31 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        found = False
-        # checking if the user is registered
         try:
             conn = connect('data/data.db')
             cursor = conn.cursor()
-            cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
-            if cursor.fetchone():
-                found = True
-                cursor.execute('SELECT password FROM users WHERE username = ?', (username,))
-                if bcrypt.checkpw(password.encode('utf-8'), cursor.fetchone()[0].encode('utf-8')):
-                    found = True
+            # 1. Fetch the user's password in one go
+            cursor.execute('SELECT password FROM users WHERE username = ?', (username,))
+            result = cursor.fetchone()
+            
+            if result:
+                # 2. Compare the entered password with the hashed password from DB
+                stored_password = result[0]
+                if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                    # 3. Success: Set the session and redirect
                     session['user'] = username
                     flash(f'Welcome back, {username}!', 'success')
                     return redirect(url_for('profile'))
                 else:
-                    found = False
                     flash('Invalid username or password.', 'error')
-                    return render_template('login.html')
             else:
                 flash('Invalid username or password.', 'error')
-                return render_template('login.html')
-        except FileNotFoundError:
-            flash('No users registered yet!', 'error')
-            return render_template('register.html')
+                
         except Exception as e:
             flash(f'An error occurred: {str(e)}', 'error')
-            return render_template('register.html')
         finally:
-            conn.close()
-            
-        if found:
-            session['user'] = username
-            flash(f'Welcome back, {username}!', 'success')
-            return redirect(url_for('profile'))
-        else:
-            flash('Invalid username or password.', 'error')
+            if 'conn' in locals():
+                conn.close()
             
     return render_template('login.html')
 
