@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - Auth System{% endblock %}
+
+{% block content %}
+    {% if session.get('user') %}
+        <h1>Welcome, {{ session['user'] }}!</h1>
+        <p class="subtitle">Experience the future of err0rgod</p>
+        <a href="{{ url_for('profile') }}" class="btn outline">Profile</a>
+        <a href="{{ url_for('login.logout') }}" class="btn">Logout</a>
+    {% else %}
+        <h1>Welcome to Auth</h1>
+        <p class="subtitle">Experience the future of err0rgod</p>
+        <a href="{{ url_for('register.register') }}" class="btn">Get Started</a>
+        <div class="footer-line">
+            <p class="footer-text">
+                Already registered? <a href="{{ url_for('login.login') }}">Log in here</a>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}

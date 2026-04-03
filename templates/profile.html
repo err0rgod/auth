@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Auth System{% endblock %}
+
+{% block content %}
+    <div class="profile-header">
+        <h1>User Profile</h1>
+        <p class="subtitle">Welcome to your personal dashboard</p>
+    </div>
+    
+    <div class="profile-card">
+        <div class="profile-info">
+            <span class="label">Username:</span>
+            <span class="value">{{ session['user'] }}</span>
+        </div>
+        
+        <div class="profile-info">
+            <span class="label">Status:</span>
+            <span class="value">Logged In</span>
+        </div>
+    </div>
+    
+    <div class="profile-actions">
+        <button type="button" onclick="window.location.href='{{ url_for('index') }}';" class="btn outline">Home</button>
+        <button type="button" onclick="window.location.href='{{ url_for('login.logout') }}';" class="btn">Logout</button>
+    </div>
+{% endblock %}
